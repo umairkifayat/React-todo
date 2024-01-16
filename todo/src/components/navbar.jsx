@@ -49,8 +49,8 @@ const Navbar = () => {
           </a>
         </li>
         <li>
-          <a href="/logout" style={navLinkStyle}>
-            Logout
+          <a href="/register" style={navLinkStyle}>
+            Register
           </a>
         </li>
       </ul>

@@ -1,37 +1,63 @@
-import React, { useRef, useState } from 'react'
-import { TextField,Button,Box,CircularProgress } from "@mui/material";
+import React, { useRef, useState } from 'react';
+import { TextField, Button, Box, CircularProgress } from '@mui/material';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../config/firebase/firebaseconfig';
+import OutlinedAlerts from '../../components/alert';
 
 
 const Register = () => {
+  const [loading, setLoading] = useState(false);
+  const [registrationSuccess, setRegistration] = useState(false);
 
-  // use state 
-  const [loading,setloading] = useState(false);
+  const email = useRef();
+  const password = useRef();
 
-// use ref 
-const email = useRef()
-const password = useRef()
+  const handleRegister = async (event) => {
+    event.preventDefault();
+
+    try {
+      // Start loading
+      setLoading(true);
+
+      // Register user
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      );
+
+      // Signed up
+      const user = userCredential.user;
+      console.log(user);
 
 
-  // Register function 
-  const Register = (event)=>{
-event.preventDefault()
-console.log('login clicked');
-console.log(email.current.value);
-console.log(password.current.value);
-email.current.value = ''
-password.current.value = ''
-setloading(!loading)
-  }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorMessage);
+      // Handle error if needed
+    } finally {
+      // Stop loading
+      
+      setRegistration(true)
+      setLoading(false);
+    }
+  };
+
   return (
-    <Box sx={{height:'80vh'}} className = 'd-flex justify-content-center align-item-center'>
-      <form onSubmit={Register} className='d-flex justify-content-center flex-column w-25 gap-5' >
-
-    <TextField id="standard-basic" type='email' label="Email" variant="standard" required inputRef={email}/>
-    <TextField id="standard-basic" type='password' label="Password" variant="standard" required inputRef={password} />
-    <Button variant="contained" type='submit' >{loading ? <CircularProgress sx={{color:'white'}} size={20}/> : 'Register'}</Button>
+    <Box sx={{ height: '80vh' }} className="d-flex justify-content-center align-item-center">
+      <form onSubmit={handleRegister} className="d-flex justify-content-center flex-column w-25 gap-5">
+      {registrationSuccess && <OutlinedAlerts message="Registration successful!" />}
+        <TextField id="standard-basic" type="text" label="Fullname" variant="standard" required />
+        <TextField id="standard-basic" type="email" label="Email" variant="standard" required inputRef={email} />
+        <TextField id="standard-basic" type="password" label="Password" variant="standard" required inputRef={password} />
+        <Button variant="contained" type="submit">
+          {loading ? <CircularProgress sx={{ color: 'white' }} size={20} /> : 'Register'}
+        </Button>
+       
       </form>
     </Box>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

@@ -15,7 +15,7 @@ const Protectedroutes = ({ components }) => {
         onAuthStateChanged(auth, (user) => {
             if (!user) {
                 console.log('user ha');
-                navigate('/login')
+                // navigate('/login')
                 return
             }
             

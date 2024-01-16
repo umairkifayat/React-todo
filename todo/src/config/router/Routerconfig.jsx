@@ -12,7 +12,7 @@ const Routerconfig = () => {
     <BrowserRouter>
     <Navbar />
       <Routes>
-        <Route path='/' element={<Protectedroutes  components={<Home/>}/> } />
+        <Route path='/' element={<Protectedroutes  components={<Home />}/> } />
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
       </Routes>
